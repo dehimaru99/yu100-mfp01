@@ -1,0 +1,29 @@
+{
+  "harness": "YU100-MFP-VALIDATION-HARNESS-v001",
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9,
+    "human_validation_pending": ["VS-10"]
+  },
+  "calibration": {
+    "unknown_route_coefficients": {
+      "PROCEED": {"reward": 0.75, "danger": -0.65, "risk": 0.75},
+      "SCOUT": {"info_gap": 0.45, "danger": 0.15, "risk": -0.45},
+      "AVOID": {"danger": 0.75, "reward": -0.55, "risk": -0.65}
+    },
+    "note": "Initial draft over-weighted SCOUT; coefficients calibrated before Golden Fixture freeze."
+  },
+  "fixture_seeds": {"VS-01":1140,"VS-02":1209,"VS-03":1311,"VS-04":1403,"VS-05":1501,"VS-06":1601,"VS-07":1701,"VS-08":1801,"VS-09":1922},
+  "results": [
+    {"id":"VS-01","status":"PASS","details":{"seed":1140,"haruto":"PROCEED","aria":"SCOUT","haruto_personal":"PROCEED","aria_personal":"SCOUT"}},
+    {"id":"VS-02","status":"PASS","details":{"seed":1209,"with_aria":"SCOUT","with_sera":"PROCEED","aria_proposal":"SCOUT","sera_proposal":"PROCEED"}},
+    {"id":"VS-03","status":"PASS","details":{"seed":1311,"low_trust":"PROCEED","high_trust":"SCOUT","aria_weight_low":0.14826827230428616,"aria_weight_high":0.34595930204333436}},
+    {"id":"VS-04","status":"PASS","details":{"seed":1403,"conservative":"AVOID","aggressive":"PROCEED","haruto_personal_conservative":"PROCEED","aria_personal_conservative":"AVOID"}},
+    {"id":"VS-05","status":"PASS","details":{"action_fit":0.716,"capability":0.604375,"readiness":0.9874999999999999,"base_score":0.73123125,"world_noise":-0.22,"execution_score":0.51123125,"process":"CONTEXT_ALIGNED","variance":"ADVERSE_SHOCK","outcome":"SETBACK"}},
+    {"id":"VS-06","status":"PASS","details":{"action_fit":0.38350000000000006,"capability":0.6205,"readiness":0.9874999999999999,"base_score":0.58725,"world_noise":0.23,"execution_score":0.81725,"process":"HIGH_RISK","variance":"FORTUNATE_BREAK","outcome":"STRONG_SUCCESS"}},
+    {"id":"VS-07","status":"PASS","details":{"seed":1701,"causal_path":["PROCEED","SUPPLIES_LOW","PUSH","HIGH_FATIGUE","ENEMY_ENCOUNTER","ISOLATED"]}},
+    {"id":"VS-08","status":"PASS","details":{"seed":1801,"sigma_before":0.18944061499999998,"sigma_after":0.1802153151143902,"danger_error_before":0.022153897131040545,"danger_error_after":0.021075055908587825,"confidence_before":0.5695000000000001,"confidence_after":0.5980367830597855,"experience_value":0.1141471322391414}},
+    {"id":"VS-09","status":"PASS","details":{"seed":1922,"initial_trust":0.5,"final_trust":0.5541151715176774,"history":[{"step":1,"seed":1209,"aria_proposal":"SCOUT","selected":"SCOUT","adopted":true,"delta":0.012909472730988828,"trust":0.5129094727309889,"evidence":0.13141666666666663},{"step":2,"seed":1311,"aria_proposal":"SCOUT","selected":"PROCEED","adopted":false,"delta":0.006918137787409279,"trust":0.5198276105183981,"evidence":0.13141666666666663},{"step":3,"seed":1140,"aria_proposal":"SCOUT","selected":"PROCEED","adopted":false,"delta":0.007723361685539049,"trust":0.5275509722039371,"evidence":0.13141666666666663},{"step":4,"seed":1209,"aria_proposal":"SCOUT","selected":"SCOUT","adopted":true,"delta":0.012447103649296184,"trust":0.5399980758532332,"evidence":0.13141666666666663},{"step":5,"seed":1311,"aria_proposal":"SCOUT","selected":"PROCEED","adopted":false,"delta":0.006670355938960183,"trust":0.5466684317921934,"evidence":0.13141666666666663},{"step":6,"seed":1140,"aria_proposal":"SCOUT","selected":"PROCEED","adopted":false,"delta":0.007446739725484039,"trust":0.5541151715176774,"evidence":0.13141666666666663}],"base_action":"PROCEED","grown_action":"SCOUT","base_aria_weight":0.35107796235937566,"grown_aria_weight":0.37640948789158146}}
+  ]
+}
