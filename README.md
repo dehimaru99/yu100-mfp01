@@ -59,6 +59,8 @@ README.md
 .nojekyll
 
 docs/
+  design/
+    MFP_DESIGN_CONTRACT_v0.1.md
   validation/
     validation_report_v001.md
     validation_results_v001.json
@@ -66,8 +68,6 @@ docs/
 validation/
   validation_harness_v001.py
 ```
-
-Design Contract本体は後続bootstrapで `docs/design/` に配置する。
 
 ## Validation Gates
 
@@ -82,3 +82,4 @@ Design Contract本体は後続bootstrapで `docs/design/` に配置する。
 
 `index.html` は静的Webアプリ。GitHub Pages等のHTTPS静的ホスティングからiPhone Safariで実行する想定。
 
+GitHub Pagesを使用する場合、Publishing Sourceは `main` / `/ (root)` を想定する。
