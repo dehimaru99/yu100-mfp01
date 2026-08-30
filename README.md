@@ -17,19 +17,16 @@ Primary Question:
 ## Current Stage
 
 - Base Design Contract: v0.1
-- Current Design Delta: v0.2 + v0.2.1 clarification
+- Current Design Delta: v0.2 + v0.2.1 + **v0.2.2 bottleneck correction**
 - Headless Simulation Validation: VS-01〜VS-09 PASS（Decision Model知見は保持）
-- Playable Shell: **v0.2.1**
+- Playable Shell: **v0.2.2**
 - Human Validation: **Gate M RETEST REQUIRED**
 
-v0.2 Human ValidationではMission目的自体は理解された一方、以下のResult Readability不足が確認された。
+v0.2〜v0.2.1 Human ValidationでMission目的と結果語彙は概ね理解されたが、単一路線の途中区間を安全化しただけで北部への輸送能力が比例上昇するモデルは不自然と判断した。
 
-- 遠征到達 / 調査済み / 補給路運用可能の意味が一見して区別しづらい
-- 遠征携行物資の消費と、輸送能力 / 生活備蓄見込みの因果関係が不明瞭
+v0.2.2ではEnd-to-Endのボトルネック原則へ修正する。
 
-v0.2.1ではシミュレーションのDecision / Outcome baselineを変更せず、用語と因果表示を修正した。
-
-## MFP v0.2 Canonical Cycle
+## Canonical Cycle
 
 `Need → Mission → Party / Leader / Policy → Autonomous Expedition → Objective Result → Cost / Gain → Personal Appraisal → Experience / Trust → Recomposition`
 
@@ -44,29 +41,31 @@ Result表示の優先順位:
 
 人物関係はMission Resultを置き換えない。
 
-## v0.2.1 Result Vocabulary
+## Result Vocabulary
 
 - **遠征到達** — 今回の部隊が物理的に進んだ最深地点
 - **調査済み** — 状況情報を持ち帰った地点
 - **補給路運用可能** — 継続輸送に使えることを確認した連続区間
+- **北部安定輸送能力** — 本部から北部集落までEnd-to-Endで安定輸送できる能力
+- **北部集落 生活備蓄見込み** — 北部集落側の生活備蓄が何か月維持できるかのDerived Indicator
+- **遠征携行物資** — 今回の遠征を継続する余力
 
-これらを同一のSector表示上で区別する。
+## v0.2.2 Bottleneck Rule
 
-### Cost / Effect Boundary
+MFPでは詳細物流モデルを作らず、単一路線のボトルネック原則だけを検証する。
 
-`遠征携行物資` は今回の遠征を継続する余力であり、MFP v0.2.1では北部集落の生活備蓄とは別勘定とする。
+- Sector 10まで連続した補給路が未完成: 北部安定輸送能力 43%、北部集落生活備蓄見込み 1.4か月
+- Sector 10まで連続した補給路が完成: 北部安定輸送能力 82%、北部集落生活備蓄見込み 2.4か月
 
-したがって:
+したがって、Sector 4 → 7まで補給路を改善しても北部への直接効果はまだ発生しない。
 
-`遠征携行物資消費 → 今回の遠征余力低下`
+部分成功の恒久価値は、**次回遠征で既確立区間を再攻略せず、残る未確立区間へ集中できること**に置く。
 
-`補給路運用範囲拡大 → 輸送能力上昇 → 平常時の生活備蓄見込み上昇`
-
-を明示的に分離して表示する。
+`遠征携行物資` と `北部集落 生活備蓄` は別勘定。本部経済・本部備蓄はMFPでは未実装。
 
 ## Character Compression
 
-MFP v0.2の恒常的人格軸は4つに限定する。
+恒常的人格軸は4つに限定する。
 
 - Risk — 安全 ↔ 挑戦
 - Cohesion — 自己保存 ↔ 仲間・集団
@@ -82,7 +81,7 @@ Fairness / Recognition / Loyalty / 忖度 / Curiosity / Legacy等を独立軸と
 - 8 Heroes / 4-person Party / 1 Leader
 - 1 Canonical Need / Mission
 - Risk Policy / Priority
-- Operational Route Frontier / Transport Capability / Reserve Outlook / Information
+- Operational Route Frontier / End-to-End Transport Capability / Northern Reserve Outlook / Information
 - Perception → Proposal → Leader Decision
 - Directional Trust / Experience
 - Objective Mission Result / Cost / Gain
@@ -99,6 +98,15 @@ Fairness / Recognition / Loyalty / 忖度 / Curiosity / Legacy等を独立軸と
 - 手動戦闘 / LLMによる意思決定
 - 大規模迷宮 / オンライン協力
 - 恋愛・派閥・政治システム
+- **複数補給路**（将来候補として記録のみ）
+
+## Deferred Candidate — Multiple Supply Routes
+
+将来、同一目的地に対してリスク / 輸送量 / 距離 / 冗長性が異なる複数補給路を持たせる案を検討可能。
+
+例: 短く危険な高容量路 / 長く安全な低容量路 / 予備路。
+
+MFP v0.2.2には実装しない。単一路線でMission → Result → Recompositionが成立した後に再評価する。
 
 ## Repository Layout
 
@@ -116,6 +124,7 @@ docs/
     MFP_DESIGN_CONTRACT_v0.1.md
     MFP_DESIGN_CONTRACT_v0.2_DELTA.md
     MFP_DESIGN_CONTRACT_v0.2.1_DELTA.md
+    MFP_DESIGN_CONTRACT_v0.2.2_DELTA.md
   validation/
     validation_report_v001.md
     validation_results_v001.json
