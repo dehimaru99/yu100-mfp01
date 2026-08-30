@@ -17,14 +17,12 @@ Primary Question:
 - Base Design Contract: v0.1
 - Current Design Delta: v0.2
 - Headless Simulation Validation: VS-01〜VS-09 PASS（Decision Model知見は保持）
-- Human Validation: **VS-10 PAUSED**
-- Playable Shell: v0.1（v0.2 revision required）
+- Playable Shell: **v0.2**
+- Human Validation: **VS-10 READY FOR RETEST**
 
-v0.1 Human Validationで、個々のDecisionは観察可能だが、Missionの目的に対する遠征成果が十分に提示されない `Mission Feedback Loop` 欠落が確認された。
+v0.1 Human Validationで確認された `Mission Feedback Loop` 欠落を受け、v0.2ではMission Contract / Objective Result / Derived Indicator / Personal Appraisalを実装した。
 
-このためVS-10判定を一旦停止し、v0.2でMission Contract / Objective Result / Derived Indicator / Personal Appraisalを追加してから再開する。
-
-Headless PASSは「ゲームとして面白い」ことを意味しない。
+Human Validationは Gate M — Mission Integrity から再開する。
 
 ## MFP v0.2 Canonical Cycle
 
@@ -52,48 +50,41 @@ MFP v0.2の恒常的人格軸は4つに限定する。
 
 Fairness / Recognition / Loyalty / 忖度 / Curiosity / Legacy等を独立軸として追加しない。まず4軸 + Ability + Experience + Role + Trust + History + Situationの組合せで表現する。
 
+通常UIでは内部人格値を直接表示せず、行動・事後評価・履歴から人物像を推測させる。
+
 ## MFP Scope
 
-- 8 Heroes
-- 4-person Party
-- 1 Leader
+- 8 Heroes / 4-person Party / 1 Leader
 - 1 Canonical Need / Mission
 - Risk Policy / Priority
-- Fixed 12-Sector world
-- 5 Decision Event types
+- Safe Route Frontier / Transport Capability / Reserve Outlook / Information
 - Perception → Proposal → Leader Decision
-- Directional Trust
-- Experience
-- Decision / Outcome separation
-- Mission Result / Cost / Gain
+- Directional Trust / Experience
+- Objective Mission Result / Cost / Gain
 - Personal Appraisal
-- AAR
-- Recomposition
+- AAR / Recomposition
 
 ## Explicit Non-Goals
 
-MFPでは以下を実装しない。
-
-- 学校・教育
-- 引退・世代交代
-- 国家・外交
-- 文化・制度
+- 学校・教育・引退・世代交代
+- 国家・外交・文化・制度
 - 本格経済・詳細資源管理
-- 複数の生活Need
-- 個人欲求メーター
+- 複数の生活Need / 個人欲求メーター
 - 装備・職業・スキルツリー
-- 手動戦闘
-- LLMによる意思決定
-- 大規模迷宮
-- オンライン協力
+- 手動戦闘 / LLMによる意思決定
+- 大規模迷宮 / オンライン協力
 - 恋愛・派閥・政治システム
 
 ## Repository Layout
 
 ```text
-index.html                 # 現行Playable Shell v0.1
-README.md
+index.html
+styles.css
+data.js
+simulation.js
+app.js
 .nojekyll
+README.md
 
 docs/
   design/
@@ -102,6 +93,7 @@ docs/
   validation/
     validation_report_v001.md
     validation_results_v001.json
+    mfp_v0.2_smoke_report.md
 
 validation/
   validation_harness_v001.py
@@ -121,6 +113,6 @@ Gate MがFAILした場合、A〜DのHuman Validation結果は有効とみなさ�
 
 ## Hosting
 
-`index.html` はGitHub PagesからiPhone Safariで実行する静的Webアプリ。
+GitHub PagesからiPhone Safariで実行する静的Webアプリ。
 
-Publishing Sourceは `main` / `/ (root)` を想定する。
+Publishing Source: `main` / `/ (root)`
