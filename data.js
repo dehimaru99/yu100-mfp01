@@ -2,4 +2,18 @@ const HEROES=[
 {id:'H01',n:'ハルト',c:.68,e:.45,r:.72,ri:.85,co:.90,d:.30,am:.82},{id:'H02',n:'アリア',c:.48,e:.92,r:.62,ri:.25,co:.75,d:.80,am:.48},{id:'H03',n:'リナ',c:.55,e:.60,r:.78,ri:.35,co:.30,d:.90,am:.45},{id:'H04',n:'カイル',c:.82,e:.42,r:.55,ri:.90,co:.25,d:.20,am:.92},{id:'H05',n:'ミナ',c:.45,e:.58,r:.88,ri:.30,co:.95,d:.60,am:.25},{id:'H06',n:'セラ',c:.42,e:.86,r:.52,ri:.70,co:.45,d:.25,am:.65},{id:'H07',n:'ロイド',c:.92,e:.30,r:.70,ri:.75,co:.60,d:.75,am:.78},{id:'H08',n:'エルナ',c:.60,e:.55,r:.76,ri:.50,co:.65,d:.95,am:.52}];
 const SECTOR={5:{t:'UNKNOWN_ROUTE',title:'崩れた旧道',dg:.67,rw:.62,u:.28,info:.30,a:['PROCEED','SCOUT','AVOID']},6:{t:'ENEMY',title:'補給路上の敵集団',dg:.64,rw:.58,u:.42,info:.46,a:['ENGAGE','SCOUT','AVOID']},7:{t:'INJURY',title:'足場崩落による負傷',dg:.57,rw:.48,u:.38,info:.56,a:['CONTINUE','TREAT','RETREAT']},8:{t:'STRANDED',title:'旧輸送隊の遭難者',dg:.68,rw:.44,u:.76,info:.41,a:['RESCUE','CONTINUE_MISSION','REPORT']},9:{t:'SUPPLY',title:'予定以上の物資消耗',dg:.61,rw:.55,u:.56,info:.55,a:['PUSH','REDUCE','RETREAT']},10:{t:'UNKNOWN_ROUTE',title:'北部集落手前の未確認路',dg:.72,rw:.70,u:.62,info:.28,a:['PROCEED','SCOUT','AVOID']}};
 const LABEL={PROCEED:'進行',SCOUT:'偵察',AVOID:'回避',ENGAGE:'交戦',CONTINUE:'続行',TREAT:'応急処置後続行',RETREAT:'撤退',RESCUE:'救助',CONTINUE_MISSION:'任務継続',REPORT:'報告',PUSH:'強行',REDUCE:'目標縮小'};
-const KEY='yu100mfp024',DEFAULT={sel:['H01','H02','H07','H05'],leader:'H01',risk:'NORMAL',priority:'SURVIVAL',trust:{},xp:{},runs:0,month:1,missionStatus:'ACTIVE',memos:[],last:null,world:{frontier:4,known:[1,2,3,4]},settlement:{reserve:2.0},org:{reserve:100},observations:{}};
+const ACTION_PROFILE={
+PROCEED:{mission:2,safety:-1,preserve:-1,learning:0,relation:0},
+SCOUT:{mission:1,safety:1,preserve:-1,learning:2,relation:0},
+AVOID:{mission:-1,safety:2,preserve:2,learning:-1,relation:0},
+ENGAGE:{mission:2,safety:-2,preserve:-2,learning:1,relation:0},
+CONTINUE:{mission:2,safety:-1,preserve:-1,learning:0,relation:0},
+TREAT:{mission:0,safety:2,preserve:-1,learning:1,relation:1},
+RETREAT:{mission:-2,safety:2,preserve:2,learning:0,relation:0},
+RESCUE:{mission:-1,safety:-1,preserve:-2,learning:1,relation:2},
+CONTINUE_MISSION:{mission:2,safety:-1,preserve:-1,learning:0,relation:-1},
+REPORT:{mission:0,safety:1,preserve:1,learning:1,relation:0},
+PUSH:{mission:2,safety:-2,preserve:-2,learning:0,relation:0},
+REDUCE:{mission:-1,safety:1,preserve:1,learning:0,relation:0}
+};
+const KEY='yu100mfp025',DEFAULT={sel:['H01','H02','H07','H05'],leader:'H01',risk:'NORMAL',priority:'SURVIVAL',trust:{},xp:{},runs:0,month:1,missionStatus:'ACTIVE',memos:[],last:null,world:{frontier:4,known:[1,2,3,4]},settlement:{reserve:2.0},org:{reserve:100},observations:{}};
