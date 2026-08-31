@@ -17,16 +17,18 @@ Primary Question:
 ## Current Stage
 
 - Base Design Contract: v0.1
-- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + v0.2.3 + **v0.2.4 Gate A Character Distinction**
+- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + v0.2.3 + v0.2.4 + **v0.2.5 Action Profile Readability**
 - Headless Simulation Validation: VS-01〜VS-09 PASS（Decision Model知見は保持）
-- Playable Shell: **v0.2.4**
+- Playable Shell: **v0.2.5**
 - Gate M — Mission Integrity: **CLOSED**
-- Gate A — Character Distinction: **READY FOR HUMAN RETEST**
+- Gate A — Character Distinction: **ACTION PROFILE HUMAN RETEST REQUIRED**
 - Gate B — Recomposition: NOT YET EVALUATED
 
 v0.2〜v0.2.3でMission purpose / result / bottleneck / time pressure / northern reserve / HQ operational reserveを人間が追える状態まで整理した。
 
-v0.2.4では、人物差を「性格ラベルを読んだ結果」ではなく、実際の提案・隊長判断・事後評価・履歴から認識できるかを検証するため、初期人格ラベルを通常UIから除外した。
+v0.2.4では初期人格ラベルを通常UIから除外してGate A A1を実施した。Proposal差は実際に生成されていたが、Human observationは「取り立てて強い印象はない」であり、人物差が人物像として十分に立ち上がらなかった。
+
+v0.2.5ではSimulation式を変更せず、各Actionが持つトレードオフをAction Profileとして表示し、既存の行動差が読み取りやすくなるかを分離検証する。
 
 ## Canonical Cycle
 
@@ -124,7 +126,7 @@ Mission Status:
 
 Fairness / Recognition / Loyalty / 忖度 / Curiosity / Legacy等を独立軸として追加しない。まず4軸 + Ability + Experience + Role + Trust + History + Situationの組合せで表現する。
 
-### v0.2.4 Personality Visibility
+### Personality Visibility
 
 Gate A検証中は通常UIに以下を表示しない:
 - raw personality values
@@ -142,11 +144,51 @@ Gate A検証中は通常UIに以下を表示しない:
 - Personal Appraisal
 - 遠征後に蓄積した観察履歴
 
-既存テスターは旧版のラベルを見ているため、v0.2.4は完全な初見blind studyではなく **reduced-contamination retest** と位置づける。
+既存テスターは旧版のラベルを見ているため、完全な初見blind studyではなく **reduced-contamination retest** と位置づける。
+
+## v0.2.5 Action Profile Readability
+
+Gate A A1では人物ごとのProposalに差があったにもかかわらず、人物としての印象が弱かった。
+
+v0.2.5では各Actionへ、以下5軸の表示用Profileを付与する。
+
+- Mission — 主目的を前進させる傾向
+- Safety — 即時安全を確保する傾向
+- Preserve — 運用資源を温存する傾向
+- Learning — 情報・学習機会を得る傾向
+- Relation — 人間関係・他者を優先する傾向
+
+Notation:
+- ↑↑ strongly favors
+- ↑ favors
+- → neutral
+- ↓ sacrifices
+- ↓↓ strongly sacrifices
+
+例:
+
+`PUSH: Mission ↑↑ / Safety ↓↓ / Preserve ↓↓`
+
+`SCOUT: Mission ↑ / Safety ↑ / Preserve ↓ / Learning ↑↑`
+
+### Critical Boundary
+
+Action Profileは **表示上の意味圧縮** であり、v0.2.5ではOutcomeへ追加補正しない。
+
+したがって `Mission ↑↑` は「隠れた+2補正」を意味しない。
+
+AARでは各人物について:
+- Proposal trace
+- 平均Action Profile
+- 最終Leader Decisionとの一致数
+
+を表示する。
+
+この表示だけで人物差が認識可能になるかを先に確認し、不十分な場合のみ `character disposition → execution / consequence / learning` の限定的な実効果追加を検討する。
 
 ## Gate A Human Validation
 
-### A1 — Baseline
+### A1R — Action Profile Retest
 
 Fresh reset後、既定条件:
 - Party: H01 / H02 / H07 / H05
@@ -154,18 +196,17 @@ Fresh reset後、既定条件:
 - Risk: NORMAL
 - Priority: SURVIVAL
 
-1か月遠征し、人物を行動ベースで評価する。
+1か月遠征し、Action ProfileとBehavioral Patternを見て人物を行動ベースで評価する。
+
+確認事項:
+- ↑↓表示で人物差が前より読みやすいか
+- 誰が何を優先しているように見えるか
+- 表示がProposal内容と整合しているか
+- 表示だけでは人物差が依然として cosmetic に見えるか
 
 ### A2 — Leader Contrast
 
-再度Fresh resetし、Party / Risk / Priorityを固定してLeaderのみH02へ変更する。
-
-比較対象:
-- Proposal
-- Leader Decision
-- adviceの使われ方
-- route progress / cost
-- Personal Appraisal
+A1R後に必要ならFresh resetし、Party / Risk / Priorityを固定してLeaderのみH02へ変更する。
 
 Runtime seedはplayer configurationを含むため、このHuman比較を厳密な単一変数因果試験とはみなさない。Leader差の因果的裏付けには既存Headless VS-01を使用する。
 
@@ -215,7 +256,7 @@ Gate A / Gate B成立前には実装しない。
 ## Validation Gates
 
 - Gate M — Mission Integrity: **CLOSED**
-- Gate A — Character Distinction: **ACTIVE**
+- Gate A — Character Distinction: **ACTIVE / ACTION PROFILE RETEST**
 - Gate B — Recomposition
 - Gate C — Causal Clarity
 - Gate D — Curiosity
