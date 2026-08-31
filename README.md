@@ -12,17 +12,21 @@
 
 Primary Question:
 
-> 具体的なMissionに対する成果と因果を見たプレイヤーが、残り時間と組織余力を考慮して、次は編成・隊長・方針を変えて試したいと思うか。
+> 具体的なMissionに対する成果と因果を見たプレイヤーが、人物差を理解し、残り時間と組織余力を考慮して、次は編成・隊長・方針を変えて試したいと思うか。
 
 ## Current Stage
 
 - Base Design Contract: v0.1
-- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + **v0.2.3 Temporal Pressure / HQ Operational Reserve**
+- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + v0.2.3 + **v0.2.4 Gate A Character Distinction**
 - Headless Simulation Validation: VS-01〜VS-09 PASS（Decision Model知見は保持）
-- Playable Shell: **v0.2.3**
-- Human Validation: **Gate M / Temporal Pressure RETEST REQUIRED**
+- Playable Shell: **v0.2.4**
+- Gate M — Mission Integrity: **CLOSED**
+- Gate A — Character Distinction: **READY FOR HUMAN RETEST**
+- Gate B — Recomposition: NOT YET EVALUATED
 
-v0.2.2で単一路線のEnd-to-End Bottleneckを導入した。v0.2.3では、Human Validationで確認された「未達・失敗に継続的な重みが必要」という論点に対し、時間経過と本部側リソースを最小追加する。
+v0.2〜v0.2.3でMission purpose / result / bottleneck / time pressure / northern reserve / HQ operational reserveを人間が追える状態まで整理した。
+
+v0.2.4では、人物差を「性格ラベルを読んだ結果」ではなく、実際の提案・隊長判断・事後評価・履歴から認識できるかを検証するため、初期人格ラベルを通常UIから除外した。
 
 ## Canonical Cycle
 
@@ -30,7 +34,7 @@ v0.2.2で単一路線のEnd-to-End Bottleneckを導入した。v0.2.3では、Hu
 
 ## Time Model
 
-MFP v0.2.3では **1遠征 = 1か月** と固定する。
+MFPでは **1遠征 = 1か月** と固定する。
 
 毎月の遠征終了後に persistent state を更新する。
 
@@ -65,7 +69,7 @@ Sector 10まで連続した補給路が成立すると:
 
 本部側の抽象的な組織資源。初期値は **100%**。
 
-これは詳細な資金・食料・医薬品・人員を個別管理する経済モデルではなく、以下をまとめたMFP用指標:
+詳細な資金・食料・医薬品・人員を個別管理する経済モデルではなく、以下をまとめたMFP用指標:
 
 - 遠征展開
 - 携行物資補充
@@ -78,8 +82,6 @@ Sector 10まで連続した補給路が成立すると:
 
 `Next Sortie Capacity = 50 + 0.5 × HQ Operational Reserve`
 
-したがって失敗は「数字が減る」だけでなく、次回遠征の条件を悪化させる。
-
 ### 遠征携行物資
 
 今回の遠征を継続する余力。本部運用余力とは別状態だが、その上限を本部状態から受ける。
@@ -89,20 +91,18 @@ Sector 10まで連続した補給路が成立すると:
 一回の遠征結果とMission全体の結果を分ける。
 
 Expedition Result:
-
 - SUCCESS
 - PARTIAL SUCCESS
 - FAILURE
 
 Mission Status:
-
 - ACTIVE
 - SUCCESS — Sector 10までEnd-to-End補給路成立
 - FAILED — 北部生活備蓄または本部運用余力が尽きる
 
 一回の遠征失敗は即Game Overではない。失敗後の状態を引き継いで再編成・方針変更できる限りMissionは継続する。
 
-## v0.2.2 Bottleneck Rule — Preserved
+## Bottleneck Rule
 
 - Sector 10まで連続した補給路が未完成: 北部安定輸送能力 43%
 - Sector 10まで連続した補給路が完成: 北部安定輸送能力 100%
@@ -110,6 +110,8 @@ Mission Status:
 途中区間を安全化しても、北部へのEnd-to-End輸送能力は上昇しない。
 
 部分成功の恒久価値は、次回遠征で既確立区間を再攻略せず、残る未確立区間へ集中できること。
+
+局所的にSector 9や10で補給路条件を満たしていても、より手前の未確立Sectorが残ればMissionは完了しない。
 
 ## Character Compression
 
@@ -120,7 +122,62 @@ Mission Status:
 - Discipline — 現場自律 ↔ 規律・権威
 - Ambition — ほどほどで充足 ↔ 達成・承認
 
-通常UIでは内部人格値を直接表示せず、行動・事後評価・履歴から人物像を推測させる。
+Fairness / Recognition / Loyalty / 忖度 / Curiosity / Legacy等を独立軸として追加しない。まず4軸 + Ability + Experience + Role + Trust + History + Situationの組合せで表現する。
+
+### v0.2.4 Personality Visibility
+
+Gate A検証中は通常UIに以下を表示しない:
+- raw personality values
+- 大胆 / 慎重などのRiskラベル
+- 仲間を重視等のCohesionラベル
+- 方針重視 / 現場判断等のDisciplineラベル
+- Ambitionラベル
+
+初期表示は名前と Combat / Explore / Resilience の能力Gradeのみ。
+
+人物像は以下から推測させる:
+- eventごとのProposal
+- Leader Decision
+- adviceの扱い
+- Personal Appraisal
+- 遠征後に蓄積した観察履歴
+
+既存テスターは旧版のラベルを見ているため、v0.2.4は完全な初見blind studyではなく **reduced-contamination retest** と位置づける。
+
+## Gate A Human Validation
+
+### A1 — Baseline
+
+Fresh reset後、既定条件:
+- Party: H01 / H02 / H07 / H05
+- Leader: H01
+- Risk: NORMAL
+- Priority: SURVIVAL
+
+1か月遠征し、人物を行動ベースで評価する。
+
+### A2 — Leader Contrast
+
+再度Fresh resetし、Party / Risk / Priorityを固定してLeaderのみH02へ変更する。
+
+比較対象:
+- Proposal
+- Leader Decision
+- adviceの使われ方
+- route progress / cost
+- Personal Appraisal
+
+Runtime seedはplayer configurationを含むため、このHuman比較を厳密な単一変数因果試験とはみなさない。Leader差の因果的裏付けには既存Headless VS-01を使用する。
+
+Human Gate Aで重要なのは、数理的に差があることではなく **人間が人物差として認識できること**。
+
+### Gate A PASS Evidence
+
+- 頻繁に観察した4人のうち少なくとも3人を行動用語で説明できる
+- 説明に実際のProposal / Decision / Appraisalを引用できる
+- 少なくとも1つのLeader差を知覚できる
+- 能力Gradeだけではない理由で、このMissionに向く / 向かないLeaderを選べる
+- 次にその人物がどう動きそうか予測し、試したくなる
 
 ## MFP Scope
 
@@ -153,25 +210,17 @@ Mission Status:
 
 例: 短く危険な高容量路 / 長く安全な低容量路 / 低容量だが早期開通できる予備路。
 
-v0.2.3には実装しない。
+Gate A / Gate B成立前には実装しない。
 
 ## Validation Gates
 
-- Gate M — Mission Integrity / Temporal Pressure（precondition）
-- Gate A — Character Distinction
+- Gate M — Mission Integrity: **CLOSED**
+- Gate A — Character Distinction: **ACTIVE**
 - Gate B — Recomposition
 - Gate C — Causal Clarity
 - Gate D — Curiosity
 
-v0.2.3では特に以下をHuman Validationする。
-
-1. 1遠征 = 1か月という時間経過が理解できる
-2. 北部生活備蓄と本部運用余力の損耗理由を区別できる
-3. 一回のFailureとMission Failureを区別できる
-4. 失敗が次回の携行能力を下げることを理解できる
-5. 残り時間 / 本部余力を見てRisk・隊長・編成を変えたくなる
-
-上位システムへは、この最小ループのHuman Validation成立前に進まない。
+Gate AがFAILした場合、人物差の原因を診断する。学校・文化・外交・世代交代等の上位システム追加で問題を隠さない。
 
 ## Hosting
 
