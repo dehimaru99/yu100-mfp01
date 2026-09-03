@@ -16,4 +16,4 @@ REPORT:{mission:0,safety:1,preserve:1,learning:1,relation:0},
 PUSH:{mission:2,safety:-2,preserve:-2,learning:0,relation:0},
 REDUCE:{mission:-1,safety:1,preserve:1,learning:0,relation:0}
 };
-const KEY='yu100mfp025',DEFAULT={sel:['H01','H02','H07','H05'],leader:'H01',risk:'NORMAL',priority:'SURVIVAL',trust:{},xp:{},runs:0,month:1,missionStatus:'ACTIVE',memos:[],last:null,world:{frontier:4,known:[1,2,3,4]},settlement:{reserve:2.0},org:{reserve:100},observations:{}};
+const KEY='yu100mfp026',DEFAULT={sel:['H01','H02','H07','H05'],leader:'H01',risk:'NORMAL',priority:'SURVIVAL',trust:{},xp:{},runs:0,month:1,missionStatus:'ACTIVE',memos:[],last:null,world:{frontier:4,known:[1,2,3,4]},settlement:{reserve:2.0},org:{reserve:100},observations:{}};
