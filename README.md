@@ -17,18 +17,20 @@ Primary Question:
 ## Current Stage
 
 - Base Design Contract: v0.1
-- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + v0.2.3 + v0.2.4 + **v0.2.5 Action Profile Readability**
+- Current Design Delta: v0.2 + v0.2.1 + v0.2.2 + v0.2.3 + v0.2.4 + v0.2.5 + **v0.2.6 Decision Consequence Readability**
 - Headless Simulation Validation: VS-01〜VS-09 PASS（Decision Model知見は保持）
-- Playable Shell: **v0.2.5**
+- Playable Shell: **v0.2.6**
 - Gate M — Mission Integrity: **CLOSED**
-- Gate A — Character Distinction: **ACTION PROFILE HUMAN RETEST REQUIRED**
+- Gate A — Character Distinction: **DECISION CONSEQUENCE HUMAN RETEST REQUIRED**
 - Gate B — Recomposition: NOT YET EVALUATED
 
 v0.2〜v0.2.3でMission purpose / result / bottleneck / time pressure / northern reserve / HQ operational reserveを人間が追える状態まで整理した。
 
 v0.2.4では初期人格ラベルを通常UIから除外してGate A A1を実施した。Proposal差は実際に生成されていたが、Human observationは「取り立てて強い印象はない」であり、人物差が人物像として十分に立ち上がらなかった。
 
-v0.2.5ではSimulation式を変更せず、各Actionが持つトレードオフをAction Profileとして表示し、既存の行動差が読み取りやすくなるかを分離検証する。
+v0.2.5ではSimulation式を変更せず、各Actionが持つトレードオフをAction Profileとして表示した。
+
+v0.2.6ではさらに、`person → decision → consequence → improvement` の接続を読みやすくするため、Leader Operational Preview / Mission Diagnosis / causal field comment / result vocabulary hierarchyを追加する。Simulation式そのものは変更しない。
 
 ## Canonical Cycle
 
@@ -90,19 +92,28 @@ Sector 10まで連続した補給路が成立すると:
 
 ## Mission / Expedition Result Separation
 
-一回の遠征結果とMission全体の結果を分ける。
-
-Expedition Result:
+内部のExpedition Resultは従来どおり:
 - SUCCESS
 - PARTIAL SUCCESS
 - FAILURE
 
-Mission Status:
+Mission Statusも従来どおり:
 - ACTIVE
 - SUCCESS — Sector 10までEnd-to-End補給路成立
 - FAILED — 北部生活備蓄または本部運用余力が尽きる
 
 一回の遠征失敗は即Game Overではない。失敗後の状態を引き継いで再編成・方針変更できる限りMissionは継続する。
+
+### v0.2.6 Display Vocabulary
+
+UIでは成功/失敗語彙の衝突を避けるため、階層を分離する。
+
+- Local Result: 非常に良好 / 良好 / 難航 / 不調
+- Sector State: 補給路確立 / 未確立
+- Expedition Result: 目標達成 / 前進あり / 前進なし
+- Mission Status: MISSION ACTIVE / COMPLETE / FAILED
+
+局所対応が良好でも、Sector未確立やMission Failedと両立し得る。
 
 ## Bottleneck Rule
 
@@ -148,9 +159,7 @@ Gate A検証中は通常UIに以下を表示しない:
 
 ## v0.2.5 Action Profile Readability
 
-Gate A A1では人物ごとのProposalに差があったにもかかわらず、人物としての印象が弱かった。
-
-v0.2.5では各Actionへ、以下5軸の表示用Profileを付与する。
+各Actionへ、以下5軸の表示用Profileを付与する。
 
 - Mission — 主目的を前進させる傾向
 - Safety — 即時安全を確保する傾向
@@ -165,30 +174,46 @@ Notation:
 - ↓ sacrifices
 - ↓↓ strongly sacrifices
 
-例:
+Action Profileは **表示上の意味圧縮** であり、Outcomeへ追加補正しない。
 
-`PUSH: Mission ↑↑ / Safety ↓↓ / Preserve ↓↓`
+## v0.2.6 Decision Consequence Readability
 
-`SCOUT: Mission ↑ / Safety ↑ / Preserve ↓ / Learning ↑↑`
+### Leader Operational Preview
 
-### Critical Boundary
+隊長を選択した時点で、残るSectorと現在のRisk / Priorityを前提にした自己提案の概算Action Profileを動的表示する。
 
-Action Profileは **表示上の意味圧縮** であり、v0.2.5ではOutcomeへ追加補正しない。
+- Combat / Explore / Resilience基礎能力は変化しない。
+- 数値成功率は表示しない。
+- 成功を予言しない。
+- 他メンバーへの現在のdirectional Trustも定性的に表示する。
 
-したがって `Mission ↑↑` は「隠れた+2補正」を意味しない。
+### Mission Diagnosis
 
-AARでは各人物について:
-- Proposal trace
-- 平均Action Profile
-- 最終Leader Decisionとの一致数
+補給路未完成時は、最初の未確立Sectorを最大ボトルネックとして診断する。
 
-を表示する。
+候補要因:
+- Leader Decision
+- Action Fit
+- Required Capability
+- Expedition Readiness
+- External Variance
 
-この表示だけで人物差が認識可能になるかを先に確認し、不十分な場合のみ `character disposition → execution / consequence / learning` の限定的な実効果追加を検討する。
+Outcomeに既に使っている重み付き構成要素のshortfallを比較し、主因候補1つと補助要因1つまでを表示する。raw scoreは攻略値として公開しない。
+
+`RETREAT / AVOID / REPORT` のようにAction自体が補給路を確立しない場合は、局所結果が良くてもLeader Decisionを主因とする。
+
+### Causal Field Comment
+
+診断結果に基づき、1人だけ短く振り返る。
+
+- Decision / Fit / Readiness / Variance: Leader
+- Capability: その局面のRelevant Abilityが最も低いMember
+
+Capability対象者は犯人ではなく「編成上の弱点候補」と明示する。
+
+外乱が主因なら、隊長変更で必ず改善するような誘導をしない。
 
 ## Gate A Human Validation
-
-### A1R — Action Profile Retest
 
 Fresh reset後、既定条件:
 - Party: H01 / H02 / H07 / H05
@@ -196,29 +221,14 @@ Fresh reset後、既定条件:
 - Risk: NORMAL
 - Priority: SURVIVAL
 
-1か月遠征し、Action ProfileとBehavioral Patternを見て人物を行動ベースで評価する。
-
 確認事項:
-- ↑↓表示で人物差が前より読みやすいか
-- 誰が何を優先しているように見えるか
-- 表示がProposal内容と整合しているか
-- 表示だけでは人物差が依然として cosmetic に見えるか
-
-### A2 — Leader Contrast
-
-A1R後に必要ならFresh resetし、Party / Risk / Priorityを固定してLeaderのみH02へ変更する。
-
-Runtime seedはplayer configurationを含むため、このHuman比較を厳密な単一変数因果試験とはみなさない。Leader差の因果的裏付けには既存Headless VS-01を使用する。
+- 隊長変更で何が変わりそうか選択時に理解できる
+- 未達時に最大ボトルネックと改善方向を説明できる
+- Local / Sector / Expedition / Missionの結果階層を区別できる
+- 原因に紐づく発言が人物を記憶する助けになる
+- 人物差がまだ弱ければ、表示追加ではなく bounded mechanical consequence coupling を次に検討する
 
 Human Gate Aで重要なのは、数理的に差があることではなく **人間が人物差として認識できること**。
-
-### Gate A PASS Evidence
-
-- 頻繁に観察した4人のうち少なくとも3人を行動用語で説明できる
-- 説明に実際のProposal / Decision / Appraisalを引用できる
-- 少なくとも1つのLeader差を知覚できる
-- 能力Gradeだけではない理由で、このMissionに向く / 向かないLeaderを選べる
-- 次にその人物がどう動きそうか予測し、試したくなる
 
 ## MFP Scope
 
@@ -256,7 +266,7 @@ Gate A / Gate B成立前には実装しない。
 ## Validation Gates
 
 - Gate M — Mission Integrity: **CLOSED**
-- Gate A — Character Distinction: **ACTIVE / ACTION PROFILE RETEST**
+- Gate A — Character Distinction: **ACTIVE / DECISION CONSEQUENCE RETEST**
 - Gate B — Recomposition
 - Gate C — Causal Clarity
 - Gate D — Curiosity
